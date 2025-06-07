@@ -1,10 +1,16 @@
 package luis_auth.guess_the_spy.domain;
 
-import java.util.List;
+import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+@Getter
 public class Room {
 
 	private String name;
+	private String adminName;
 	private Category category;
 	private int limitTime;
 	private int minPlayers;
@@ -12,7 +18,10 @@ public class Room {
 	private RoomStatus status;
 	private List<Player> players;
 
-	public Room(String name, Category category, int limitTime, int minPlayers, int maxPlayers, RoomStatus status, List<Player> players) {
+	private List<Message> historyMessages = new ArrayList<>();
+
+	public Room(String name, Category category, int limitTime, int minPlayers, int maxPlayers, RoomStatus status,
+	            List<Player> players, String adminName) {
 		this.name = name;
 		this.category = category;
 		this.limitTime = limitTime;
@@ -20,6 +29,7 @@ public class Room {
 		this.maxPlayers = maxPlayers;
 		this.status = status;
 		this.players = players;
+		this.adminName = adminName;
 	}
 
 	public boolean enterPlayer(Player player) throws Exception {
@@ -37,7 +47,6 @@ public class Room {
 			player.setName(player.getName());
 		}
 
-		player.setRoom(this);
 		return true;
 	}
 
@@ -47,7 +56,6 @@ public class Room {
 		}
 
 		players.remove(player);
-		player.setRoom(null);
 		return true;
 	}
 
@@ -56,7 +64,7 @@ public class Room {
 			//throw new Exception("Partida em andamento");
 			return false;
 		}
-		if (players.size() < minPlayers && players.size() > maxPlayers) {
+		if (players.size() < minPlayers || players.size() > maxPlayers) {
 //			throw new Exception("Partida em andamento");
 			return false;
 		}
@@ -65,7 +73,7 @@ public class Room {
 			return false;
 		}
 
-		if (limitTime < 0) {
+		if (limitTime <= 0) {
 //			throw new Exception("limite de tempo não configurado");
 			return false;
 		}
@@ -119,5 +127,30 @@ public class Room {
 
 	public void setStatus(RoomStatus status) {
 		this.status = status;
+	}
+
+	public String getAdminName() {
+		return adminName;
+	}
+
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Room room = (Room) o;
+		return Objects.equals(name, room.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
+
+	public List<Message> getHistoryMessages() {
+		return historyMessages;
 	}
 }

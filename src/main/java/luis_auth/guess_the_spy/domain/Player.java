@@ -4,7 +4,10 @@ import java.util.Objects;
 
 public class Player {
 	private String name;
-	private Room room;
+
+	public Player(String name) {
+		this.name = name;
+	}
 
 	public String getName() {
 		return name;
@@ -12,14 +15,6 @@ public class Player {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Room getRoom() {
-		return room;
-	}
-
-	public void setRoom(Room room) {
-		this.room = room;
 	}
 
 	@Override

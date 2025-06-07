@@ -10,6 +10,11 @@ public class Category {
 	private String name;
 	private List<String> password;
 
+	public Category(String name, List<String> passwords) {
+		this.name = name;
+		this.password = passwords;
+	}
+
 	public String getName() {
 		return name;
 	}
