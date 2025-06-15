@@ -22,6 +22,9 @@ public class RoomService {
 	@Autowired
 	WebSocketService webSocketService;
 
+	public List<Room> getAllRooms() {
+		return repository.getAll();
+	}
 
 	public Room getRoom(String roomName) throws Exception {
 		return repository.findRoomByName(roomName);

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CategoryService {
 
@@ -23,5 +25,9 @@ public class CategoryService {
 	public Category create(CategoryRequest request) {
 		Category category = new Category(request.name(), request.passwords());
 		return categoryRepository.create(category);
+	}
+
+	public List<Category> getAll() {
+		return categoryRepository.getAll();
 	}
 }

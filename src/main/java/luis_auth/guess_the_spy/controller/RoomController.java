@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,10 +24,25 @@ public class RoomController {
 		this.roomService = roomService;
 	}
 
+	@GetMapping()
+	@ResponseStatus(HttpStatus.OK)
+	public List<RoomResponse> getAllRooms() throws Exception {
+		List<Room> rooms = roomService.getAllRooms();
+		return rooms.stream().map(room -> new RoomResponse(room.getName(),
+			new CategoryResponse(room.getCategory().getName(), room.getCategory().getPassword()),
+			room.getLimitTime(), room.getMinPlayers(), room.getMaxPlayers(), room.getPlayers().stream()
+				.map(player -> new PlayerResponse(player.getName())).toList()))
+			.collect(Collectors.toList());
+	}
+
 	@GetMapping("/{roomName}")
 	@ResponseStatus(HttpStatus.OK)
-	public Room getAll(@PathVariable String roomName) throws Exception {
-		return roomService.getRoom(roomName);
+	public RoomResponse getAll(@PathVariable String roomName) throws Exception {
+		Room room = roomService.getRoom(roomName);
+		List<PlayerResponse> playerResponses = room.getPlayers().stream().map(player -> new PlayerResponse(player.getName())).toList();
+		return new RoomResponse(room.getName(),
+			new CategoryResponse(room.getCategory().getName(), room.getCategory().getPassword()),
+			room.getLimitTime(), room.getMinPlayers(), room.getMaxPlayers(), playerResponses);
 	}
 
 	@PostMapping

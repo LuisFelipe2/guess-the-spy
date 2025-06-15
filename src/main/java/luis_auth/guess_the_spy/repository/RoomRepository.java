@@ -11,6 +11,10 @@ public class RoomRepository {
 
 	List<Room> rooms = new ArrayList<>();
 
+	public List<Room> getAll() {
+		return rooms;
+	}
+
 	public Room findRoomByName(String name)  {
 		return rooms.stream().filter(room -> room.getName().equals(name))
 			.findFirst().orElseThrow(() -> new RuntimeException("Sala não existe"));

@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -23,6 +25,16 @@ public class CategoryController {
 	@Autowired
 	public CategoryController(CategoryService categoryService) {
 		this.categoryService = categoryService;
+	}
+
+
+	@GetMapping()
+	@ResponseStatus(HttpStatus.OK)
+	public List<CategoryResponse> getAll() {
+		List<Category> categories = categoryService.getAll();
+		return categories.stream()
+			.map(category -> new CategoryResponse(category.getName(), category.getPassword()))
+			.collect(Collectors.toList());
 	}
 
 	@GetMapping("/{categoryName}")
