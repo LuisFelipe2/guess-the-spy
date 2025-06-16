@@ -10,14 +10,19 @@ import java.util.List;
 @Repository
 public class GameRepository {
 
-	List<Game> games = new ArrayList<>();
+	private final List<Game> games = new ArrayList<>();
 
 	public Game findGameByRoom(String name)  {
-		return games.stream().filter(game -> game.getRoom().getName().equals(name))
-			.findFirst().orElseThrow(() -> new RuntimeException("Sala não existe"));
+		return games.stream()
+			.filter(game -> game.roomName().equals(name))
+			.findFirst()
+			.orElseThrow(() -> new RuntimeException("Sala não existe"));
 	}
 
 	public void saveGame(Game game) {
+		if(games.contains(game)) {
+			throw new RuntimeException("Game já existe");
+		}
 		games.add(game);
 	}
 }

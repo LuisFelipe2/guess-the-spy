@@ -1,156 +1,47 @@
 package luis_auth.guess_the_spy.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
+@AllArgsConstructor
 public class Room {
 
-	private String name;
-	private String adminName;
-	private Category category;
-	private int limitTime;
-	private int minPlayers;
-	private int maxPlayers;
+	private final String name;
+	private final String adminName;
+	private final Category category;
+	private final int limitTime;
+	private final int minPlayers;
+	private final int maxPlayers;
 	private RoomStatus status;
-	private List<Player> players;
-
-	private List<Message> historyMessages = new ArrayList<>();
-
-	public Room(String name, Category category, int limitTime, int minPlayers, int maxPlayers, RoomStatus status,
-	            List<Player> players, String adminName) {
-		this.name = name;
-		this.category = category;
-		this.limitTime = limitTime;
-		this.minPlayers = minPlayers;
-		this.maxPlayers = maxPlayers;
-		this.status = status;
-		this.players = players;
-		this.adminName = adminName;
-	}
-
-	public boolean enterPlayer(Player player) throws Exception {
-		if (status.equals(RoomStatus.ON_GAME)) {
-			throw new Exception("Partida em andamento");
-		}
-		if (player == null || player.getName() == null) {
-			throw new Exception("Player não informado");
-		}
-		if (players.size() == maxPlayers) {
-			throw new Exception("Sala cheia");
+	private final List<Player> players;
+	public boolean enterPlayer(Player player) {
+		if (status.equals(RoomStatus.ON_GAME) || players.size() >= maxPlayers) {
+			return false;
 		}
 
-		if (players.contains(player)) {
-			player.setName(player.getName());
-		}
-
+		players.add(player);
 		return true;
 	}
 
-	public boolean exitPlayer(Player player) throws Exception {
-		if (player == null || player.getName() == null) {
-			throw new Exception("Player não informado");
+	public boolean exitPlayer(Player player) {
+		if (player == null || player.name() == null || !players.contains(player)) {
+			return false;
 		}
 
 		players.remove(player);
 		return true;
 	}
 
-	public boolean isReady() throws Exception {
-		if (status.equals(RoomStatus.ON_GAME)) {
-			//throw new Exception("Partida em andamento");
-			return false;
-		}
-		if (players.size() < minPlayers || players.size() > maxPlayers) {
-//			throw new Exception("Partida em andamento");
-			return false;
-		}
-		if (category == null) {
-//			throw new Exception("Categoria não preenchida");
-			return false;
-		}
-
-		if (limitTime <= 0) {
-//			throw new Exception("limite de tempo não configurado");
-			return false;
-		}
-
-		return true;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public int getLimitTime() {
-		return limitTime;
-	}
-
-	public int getMinPlayers() {
-		return minPlayers;
-	}
-
-	public int getMaxPlayers() {
-		return maxPlayers;
-	}
-
-	public Category getCategory() {
-		return category;
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
-	public void setLimitTime(int limitTime) {
-		this.limitTime = limitTime;
-	}
-
-	public void setMinPlayers(int minPlayers) {
-		this.minPlayers = minPlayers;
-	}
-
-	public void setMaxPlayers(int maxPlayers) {
-		this.maxPlayers = maxPlayers;
-	}
-
-	public List<Player> getPlayers() {
-		return players;
-	}
-
-	public RoomStatus getStatus() {
-		return status;
+	public boolean isReady() {
+		return !status.equals(RoomStatus.ON_GAME)
+			&& players.size() >= minPlayers && players.size() <= maxPlayers
+			&& limitTime > 0;
 	}
 
 	public void setStatus(RoomStatus status) {
 		this.status = status;
-	}
-
-	public String getAdminName() {
-		return adminName;
-	}
-
-	public void setAdminName(String adminName) {
-		this.adminName = adminName;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Room room = (Room) o;
-		return Objects.equals(name, room.name);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(name);
-	}
-
-	public List<Message> getHistoryMessages() {
-		return historyMessages;
 	}
 }

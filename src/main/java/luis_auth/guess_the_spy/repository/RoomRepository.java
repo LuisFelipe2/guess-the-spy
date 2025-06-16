@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public class RoomRepository {
 
-	List<Room> rooms = new ArrayList<>();
+	private final List<Room> rooms = new ArrayList<>();
 
 	public List<Room> getAll() {
 		return rooms;

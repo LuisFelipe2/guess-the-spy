@@ -5,11 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Repository
 public class CategoryRepository {
-	List<Category> categories = new ArrayList<>();
+	private final List<Category> categories = new ArrayList<>();
 
 	public CategoryRepository() {
 		categories.add(new Category("Cidade", List.of(
@@ -74,19 +73,22 @@ public class CategoryRepository {
 			)));
 	}
 
+	public List<Category> getAll() {
+		return categories;
+	}
+
 	public Category findByName(String categoryName) {
 		return categories.stream()
-			.filter(c -> Objects.equals(c.getName(), categoryName))
+			.filter(c -> c.name().equals(categoryName))
 			.findFirst()
-			.orElse(null);
+			.orElseThrow(() -> new RuntimeException("Categoria não existe"));
 	}
 
 	public Category create(Category category) {
+		if(categories.contains(category)) {
+			throw new RuntimeException("Categoria já existe");
+		}
 		categories.add(category);
 		return category;
-	}
-
-	public List<Category> getAll() {
-		return categories;
 	}
 }
