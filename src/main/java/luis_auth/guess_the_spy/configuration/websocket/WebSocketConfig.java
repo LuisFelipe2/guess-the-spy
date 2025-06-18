@@ -12,7 +12,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 //    @Value("${app-url}")
-    private String appUrl = "http://localhost:3000";
+    private String appUrl = "https://guess-the-spy-react.vercel.app";
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
