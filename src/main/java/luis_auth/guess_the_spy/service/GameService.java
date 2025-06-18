@@ -39,10 +39,9 @@ public class GameService {
 
 		List<String> passwords = room.getCategory().password();
 		List<Player> players = room.getPlayers();
-		LocalDateTime timeLimit = LocalDateTime.now().plusSeconds(room.getLimitTime());
 
 		Game game = new Game(roomName, passwords.get(RANDOM.nextInt(passwords.size())),
-			players.get(RANDOM.nextInt(players.size())), new ArrayList<>(), timeLimit, new HashMap<>()
+			players.get(RANDOM.nextInt(players.size())), new ArrayList<>(), new HashMap<>()
 		);
 
 		gameRepository.saveGame(game);

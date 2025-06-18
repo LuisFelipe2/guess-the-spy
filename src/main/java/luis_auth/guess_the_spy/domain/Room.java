@@ -1,12 +1,7 @@
 package luis_auth.guess_the_spy.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import java.util.List;
 
-@Getter
-@AllArgsConstructor
 public class Room {
 
 	private final String name;
@@ -41,7 +36,50 @@ public class Room {
 			&& limitTime > 0;
 	}
 
+	public RoomStatus getStatus() {
+		return status;
+	}
+
 	public void setStatus(RoomStatus status) {
 		this.status = status;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getAdminName() {
+		return adminName;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public int getLimitTime() {
+		return limitTime;
+	}
+
+	public int getMinPlayers() {
+		return minPlayers;
+	}
+
+	public int getMaxPlayers() {
+		return maxPlayers;
+	}
+
+	public List<Player> getPlayers() {
+		return players;
+	}
+
+	public Room(String name, String adminName, Category category, int limitTime, int minPlayers, int maxPlayers, RoomStatus status, List<Player> players) {
+		this.name = name;
+		this.adminName = adminName;
+		this.category = category;
+		this.limitTime = limitTime;
+		this.minPlayers = minPlayers;
+		this.maxPlayers = maxPlayers;
+		this.status = status;
+		this.players = players;
 	}
 }

@@ -4,6 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-public record Game (String roomName, String password, Player spy, List<String> passwordGuess, LocalDateTime endsAt,
+public record Game (String roomName, String password, Player spy, List<String> passwordGuess,
                     Map<String, Integer> votes) {
 }

@@ -25,12 +25,12 @@ public class GameController {
 	@ResponseStatus(HttpStatus.OK)
 	public GameResponse getGame(@PathVariable String roomName) throws Exception {
 		Game game = gameService.getGame(roomName);
-		return new GameResponse(game.password(), game.spy().name(), game.passwordGuess().getFirst(), game.votes(), game.endsAt());
+		return new GameResponse(game.password(), game.spy().name(), game.passwordGuess().stream().findFirst().orElse(""), game.votes());
 	}
 
 	@PostMapping("/{roomName}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void guess(@PathVariable String roomName) throws Exception {
+	public void endGame(@PathVariable String roomName) throws Exception {
 		gameService.endGame(roomName);
 	}
 
